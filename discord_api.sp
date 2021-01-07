@@ -7,6 +7,7 @@
 #include <SteamWorks>
 #include <smjansson>
 
+#include "discord/AttachmentsObject.sp"
 #include "discord/DiscordRequest.sp"
 #include "discord/SendMessage.sp"
 #include "discord/GetGuilds.sp"
@@ -15,6 +16,7 @@
 #include "discord/SendWebHook.sp"
 #include "discord/reactions.sp"
 #include "discord/UserObject.sp"
+#include "discord/RoleObject.sp"
 #include "discord/MessageObject.sp"
 #include "discord/GuildMembers.sp"
 #include "discord/GuildRole.sp"
@@ -80,12 +82,32 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateNative("DiscordUser.GetEmail", Native_DiscordUser_GetEmail);
 	CreateNative("DiscordUser.IsBot", Native_DiscordUser_IsBot);
 	
+	//RoleObject.sp
+	CreateNative("DiscordRole.GetID", Native_DiscordRole_GetID);
+	CreateNative("DiscordRole.GetName", Native_DiscordRole_GetName);
+	CreateNative("DiscordRole.GetColor", Native_DiscordRole_GetColor);
+	CreateNative("DiscordRole.IsHoist", Native_DiscordRole_IsHoist);
+	CreateNative("DiscordRole.GetPosition", Native_DiscordRole_GetPosition);
+	CreateNative("DiscordRole.GetPermissions", Native_DiscordRole_GetPermissions);
+	CreateNative("DiscordRole.IsManaged", Native_DiscordRole_IsManaged);
+	CreateNative("DiscordRole.IsMentionable", Native_DiscordRole_IsMentionable);
+	
 	//MessageObject.sp
 	CreateNative("DiscordMessage.GetID", Native_DiscordMessage_GetID);
 	CreateNative("DiscordMessage.IsPinned", Native_DiscordMessage_IsPinned);
 	CreateNative("DiscordMessage.GetAuthor", Native_DiscordMessage_GetAuthor);
 	CreateNative("DiscordMessage.GetContent", Native_DiscordMessage_GetContent);
 	CreateNative("DiscordMessage.GetChannelID", Native_DiscordMessage_GetChannelID);
+	CreateNative("DiscordMessage.GetAttachments", Native_DiscordMessage_GetAttachments);
+	
+	//AttachmentsObject.sp
+	CreateNative("DiscordAttachment.GetID", Native_DiscordAttachment_GetID);
+	CreateNative("DiscordAttachment.GetFilename", Native_DiscordAttachment_GetFilename);
+	CreateNative("DiscordAttachment.GetSize", Native_DiscordAttachment_GetSize);
+	CreateNative("DiscordAttachment.GetURL", Native_DiscordAttachment_GetURL);
+	CreateNative("DiscordAttachment.GetProxyURL", Native_DiscordAttachment_GetProxyURL);
+	CreateNative("DiscordAttachment.GetHeight", Native_DiscordAttachment_GetHeight);
+	CreateNative("DiscordAttachment.GetWidth", Native_DiscordAttachment_GetWidth);
 	
 	RegPluginLibrary("discord-api");
 	

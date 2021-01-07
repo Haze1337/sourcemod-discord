@@ -34,3 +34,14 @@ public int Native_DiscordMessage_GetChannelID(Handle plugin, int numParams) {
 	JsonObjectGetString(hJson, "channel_id", buffer, sizeof(buffer));
 	SetNativeString(2, buffer, GetNativeCell(3));
 }
+
+public int Native_DiscordMessage_GetAttachments(Handle plugin, int numParams) {
+	Handle hJson = GetNativeCell(1);
+	
+	Handle hAttachments = json_object_get(hJson, "attachments");
+	
+	AttachmentList attachments = view_as<AttachmentList>(CloneHandle(hAttachments, plugin));
+	delete hAttachments;
+	
+	return _:attachments;
+}

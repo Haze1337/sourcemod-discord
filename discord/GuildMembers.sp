@@ -117,6 +117,7 @@ public MembersDataReceive(Handle request, bool failure, int offset, int statusco
 
 public int GetMembersData(const char[] data, any dp) {
 	Handle hJson = json_load(data);
+	//PrintToServer(data);
 	Handle hData = view_as<Handle>(dp);
 	DiscordBot bot = view_as<DiscordBot>(json_object_get(hData, "bot"));
 	
