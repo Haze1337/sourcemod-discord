@@ -117,7 +117,6 @@ public MembersDataReceive(Handle request, bool failure, int offset, int statusco
 
 public int GetMembersData(const char[] data, any dp) {
 	Handle hJson = json_load(data);
-	//PrintToServer(data);
 	Handle hData = view_as<Handle>(dp);
 	DiscordBot bot = view_as<DiscordBot>(json_object_get(hData, "bot"));
 	
@@ -130,7 +129,7 @@ public int GetMembersData(const char[] data, any dp) {
 		Call_StartForward(fwd);
 		Call_PushCell(bot);
 		Call_PushString(guild);
-		Call_PushCell(hJson);
+		Call_PushCell(view_as<GuildMemberList>(hJson));
 		Call_Finish();
 	}
 	

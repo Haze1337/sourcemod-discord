@@ -52,7 +52,7 @@ public void SendWebHook(DiscordWebHook hook) {
 			delete hAttachments;
 		}
 	}
-	
+	delete hook;
 	//Send
 	DiscordRequest request = new DiscordRequest(url, k_EHTTPMethodPOST);
 	request.SetCallbacks(HTTPCompleted, SendWebHookReceiveData);

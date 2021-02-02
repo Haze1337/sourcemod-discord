@@ -33,24 +33,49 @@ typedef OnMessageSent = function void(DiscordBot bot, char[] channel, DiscordMes
 typedef OnMessageDeleted = function void(DiscordBot bot, any data);
 
 //hMemberList is JSON array containing guild members
-typedef OnGetMembers = function void(DiscordBot bot, char[] guild, Handle hMemberList);
+typedef OnGetMembers = function void(DiscordBot bot, char[] guild, GuildMemberList Members);
 
-methodmap DiscordRole < Handle {
-	public native void GetID(char[] buffer, int maxlength);
+methodmap DiscordRole < Handle 
+{
+	public void GetID(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "id", buffer, maxlength);
+	}
 	
-	public native void GetName(char[] buffer, int maxlength);
+	public void GetName(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "name", buffer, maxlength);
+	}
 	
-	public native int GetColor();
+	public int GetColor()
+	{
+		return JsonObjectGetInt(this, "color");
+	}
 	
-	public native bool IsHoist();
+	public bool IsHoist()
+	{
+		return JsonObjectGetBool(this, "hoist");
+	}
+
+	public int GetPosition()
+	{
+		return JsonObjectGetInt(this, "position");
+	}
 	
-	public native int GetPosition();
+	public void GetPermissions(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "permissions", buffer, maxlength);
+	}
 	
-	public native void GetPermissions(char[] buffer, int maxlength);
+	public bool IsManaged()
+	{
+		return JsonObjectGetBool(this, "managed");
+	}
 	
-	public native bool IsManaged();
-	
-	public native bool IsMentionable();
+	public bool IsMentionable()
+	{
+		return JsonObjectGetBool(this, "mentionable");
+	}
 };
 
 methodmap RoleList < Handle {
@@ -82,76 +107,147 @@ methodmap RoleList < Handle {
     "email": "nelly@discord.com"
 }
  */
-//It's a JSON Handle with the above info TODO stop using natives!
-methodmap DiscordUser < Handle {
-	public native void GetID(char[] buffer, int maxlength);
+
+methodmap DiscordUser < Handle 
+{
+	public void GetID(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "id", buffer, maxlength);
+	}
 	
-	public native void GetUsername(char[] buffer, int maxlength);
+	public void GetUsername(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "username", buffer, maxlength);
+	}
 	
-	public native void GetDiscriminator(char[] buffer, int maxlength);
+	public void GetDiscriminator(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "discriminator", buffer, maxlength);
+	}
+	
 	public int GetDiscriminatorInt() {
 		char buffer[16];
 		this.GetDiscriminator(buffer, sizeof(buffer));
 		return StringToInt(buffer);
 	}
 	
-	public native void GetAvatar(char[] buffer, int maxlength);
+	public void GetAvatar(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "avatar", buffer, maxlength);
+	}
 	
-	public native bool IsVerified();
+	public bool IsVerified()
+	{
+		return JsonObjectGetBool(this, "verified");
+	}
 	
-	public native void GetEmail(char[] buffer, int maxlength);
+	public void GetEmail(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "email", buffer, maxlength);
+	}
 	
-	public native bool IsBot();
+	public bool IsBot()
+	{
+		return JsonObjectGetBool(this, "bot");
+	}
 };
 
-methodmap DiscordGuildUser < Handle {
+methodmap DiscordGuildMember < Handle 
+{
 	//Returns User Object
-	public DiscordUser GetUser() {
+	public DiscordUser GetUser() 
+	{
 		return view_as<DiscordUser>(json_object_get(this, "user"));
 	}
 	
 	//Returns player's nick
-	public void GetNickname(char[] buffer, int maxlength) {
+	public void GetNickname(char[] buffer, int maxlength) 
+	{
 		JsonObjectGetString(this, "nick", buffer, maxlength);
 	}
 	
 	//Returns JSON array list of roles. You can manually loop through them for now.
-	public RoleList GetRoles() {
+	public RoleList GetRoles() 
+	{
 		return view_as<RoleList>(json_object_get(this, "roles"));
 	}
 	
 	//Returns the date the user joined the guild in format: "2015-04-26T06:26:56.936000+00:00"
-	public void GetJoinedAt(char[] buffer, int maxlength) {
+	public void GetJoinedAt(char[] buffer, int maxlength) 
+	{
 		JsonObjectGetString(this, "joined_at", buffer, maxlength);
 	}
 	
-	public bool IsDeaf() {
+	public bool IsDeaf() 
+	{
 		return JsonObjectGetBool(this, "deaf");
 	}
 	
-	public bool IsMute() {
+	public bool IsMute() 
+	{
 		return JsonObjectGetBool(this, "mute");
 	}
 };
 
-//It's a JSON Handle with the above info TODO stop using natives!
-methodmap DiscordAttachment < Handle {
-	public native void GetID(char[] buffer, int maxlength);
+methodmap GuildMemberList < Handle {
+	property int Size 
+	{
+		public get() 
+		{
+			return json_array_size(this);
+		}
+	}
+	public DiscordGuildMember GetMember(int i) 
+	{
+		return view_as<DiscordGuildMember>(json_array_get(this, i));
+	}
+	public DiscordGuildMember Get(int i) 
+	{
+		return this.GetMember(i);
+	}
 	
-	public native void GetFilename(char[] buffer, int maxlength);
-	
-	public native int GetSize();
-	
-	public native void GetURL(char[] buffer, int maxlength);
-
-	public native void GetProxyURL(char[] buffer, int maxlength);
-	
-	public native int GetHeight();
-	
-	public native int GetWidth();
 };
 
-methodmap AttachmentList < Handle {
+methodmap DiscordAttachment < Handle 
+{
+	public void GetID(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "id", buffer, maxlength);
+	}
+	
+	public void GetFilename(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "filename", buffer, maxlength);
+	}
+	
+	public int GetSize()
+	{
+		return JsonObjectGetInt(this, "size");
+	}
+	
+	public void GetURL(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "url", buffer, maxlength);
+	}
+
+	public void GetProxyURL(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "proxy_url", buffer, maxlength);
+	}
+	
+	public int GetHeight()
+	{
+		return JsonObjectGetInt(this, "height");
+	}
+	
+	public int GetWidth()
+	{
+		return JsonObjectGetInt(this, "width");
+	}
+};
+
+methodmap AttachmentList < Handle 
+{
 	property int Size 
 	{
 		public get() 
@@ -174,18 +270,37 @@ methodmap AttachmentList < Handle {
 
 {"timestamp": "2017-01-15T20:26:35.353000+00:00", "mention_everyone": false, "id": "270287641155469313", "pinned": false, "edited_timestamp": null, "author": {"username": "DK-Bot", "discriminator": "6274", "bot": true, "id": "186256454863290369", "avatar": null}, "mention_roles": [], "content": "ab", "channel_id": "229677130483499008", "mentions": [], "type": 0}
  */
-methodmap DiscordMessage < Handle {
-	public native void GetID(char[] buffer, int maxlength);
+methodmap DiscordMessage < Handle 
+{
+	public void GetID(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "id", buffer, maxlength);
+	}
 	
-	public native bool IsPinned();
+	public bool IsPinned()
+	{
+		return JsonObjectGetBool(this, "pinned");
+	}
 	
-	public native DiscordUser GetAuthor();
+	public DiscordUser GetAuthor()
+	{
+		return view_as<DiscordUser>(json_object_get(this, "author"));
+	}
 	
-	public native void GetContent(char[] buffer, int maxlength);
+	public void GetContent(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "content", buffer, maxlength);
+	}
 	
-	public native void GetChannelID(char[] buffer, int maxlength);
+	public void GetChannelID(char[] buffer, int maxlength)
+	{
+		JsonObjectGetString(this, "channel_id", buffer, maxlength);
+	}
 	
-	public native AttachmentList GetAttachments();
+	public AttachmentList GetAttachments()
+	{
+		return view_as<AttachmentList>(json_object_get(this, "attachments"));
+	}
 };
 
 #include <discord/channel>
@@ -207,26 +322,6 @@ public SharedPlugin __pl_discordapi =
 #if !defined REQUIRE_PLUGIN
 public void __pl_discordapi_SetNTVOptional()
 {
-	MarkNativeAsOptional("DiscordRole.GetID");
-	MarkNativeAsOptional("DiscordRole.GetName");
-	MarkNativeAsOptional("DiscordRole.GetColor");
-	MarkNativeAsOptional("DiscordRole.IsHoist");
-	MarkNativeAsOptional("DiscordRole.GetPositon");
-	MarkNativeAsOptional("DiscordRole.GetPermissions");
-	MarkNativeAsOptional("DiscordRole.IsManaged");
-	MarkNativeAsOptional("DiscordRole.IsMentionable");
-	MarkNativeAsOptional("DiscordUser.GetID");
-	MarkNativeAsOptional("DiscordUser.GetUsername");
-	MarkNativeAsOptional("DiscordUser.GetDiscriminator");
-	MarkNativeAsOptional("DiscordUser.GetAvatar");
-	MarkNativeAsOptional("DiscordUser.IsVerified");
-	MarkNativeAsOptional("DiscordUser.GetEmail");
-	MarkNativeAsOptional("DiscordUser.IsBot");
-	MarkNativeAsOptional("DiscordMessage.GetID");
-	MarkNativeAsOptional("DiscordMessage.IsPinned");
-	MarkNativeAsOptional("DiscordMessage.DiscordUser GetAuthor");
-	MarkNativeAsOptional("DiscordMessage.GetContent");
-	MarkNativeAsOptional("DiscordMessage.GetChannelID");
 	MarkNativeAsOptional("DiscordBot.StartTimer");
 	MarkNativeAsOptional("DiscordBot.AddReactionID");
 	MarkNativeAsOptional("DiscordBot.DeleteReactionID");
@@ -243,12 +338,5 @@ public void __pl_discordapi_SetNTVOptional()
 	MarkNativeAsOptional("DiscordBot.GetGuildRoles");
 	MarkNativeAsOptional("DiscordChannel.SendMessage");
 	MarkNativeAsOptional("DiscordWebHook.Send");
-	MarkNativeAsOptional("DiscordAttachment.GetID");
-	MarkNativeAsOptional("DiscordAttachment.GetFilename");
-	MarkNativeAsOptional("DiscordAttachment.GetSize");
-	MarkNativeAsOptional("DiscordAttachment.GetURL");
-	MarkNativeAsOptional("DiscordAttachment.GetProxyURL");
-	MarkNativeAsOptional("DiscordAttachment.GetHeight");
-	MarkNativeAsOptional("DiscordAttachment.GetWidth");
 }
 #endif

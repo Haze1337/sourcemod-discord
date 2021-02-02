@@ -155,6 +155,7 @@ methodmap DiscordBot < StringMap {
 		}
 		
 		json_array_append(channels, Channel);
+		delete channels;
 		
 		//Handle fForward = CreateForward(ET_Ignore, Param_Cell, Param_Cell, Param_String, Param_String, Param_String, Param_String, Param_String, Param_Cell);
 		//AddToForward(fForward, GetMyHandle(), callback);

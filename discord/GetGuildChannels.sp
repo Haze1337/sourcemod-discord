@@ -107,9 +107,7 @@ public int GetGuildChannelsData_Data(const char[] data, any datapack) {
 	
 	//Loop through json
 	for(int i = 0; i < json_array_size(hJson); i++) {
-		Handle hObject = json_array_get(hJson, i);
-		
-		DiscordChannel Channel = view_as<DiscordChannel>(hObject);
+		DiscordChannel Channel = view_as<DiscordChannel>(json_array_get(hJson, i));
 		
 		if(fForward != INVALID_HANDLE) {
 			Call_StartForward(fForward);

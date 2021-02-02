@@ -65,9 +65,21 @@ public int OnGetMessage(Handle request, bool failure, int offset, int statuscode
 		}
 		LogError("[DISCORD] Couldn't Retrieve Messages - Fail %i %i", failure, statuscode);
 		delete request;
+		
+		DiscordBot bot = view_as<DiscordBot>(json_object_get(view_as<Handle>(dp), "bot"));
+		DiscordChannel channel = view_as<DiscordChannel>(json_object_get(view_as<Handle>(dp), "channel"));
+		if(bot.IsListeningToChannel(channel)) 
+		{
+			bot.StopListeningToChannel(channel);
+		}
+		delete bot;
+		delete channel;
+		
 		Handle fwd = view_as<Handle>(JsonObjectGetInt(view_as<Handle>(dp), "callback"));
 		if(fwd != null) delete fwd;
+		
 		delete view_as<Handle>(dp);
+		
 		return;
 	}
 
