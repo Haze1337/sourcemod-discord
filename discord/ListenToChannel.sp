@@ -71,6 +71,7 @@ public int OnGetMessage(Handle request, bool failure, int offset, int statuscode
 		if(bot.IsListeningToChannel(channel)) 
 		{
 			bot.StopListeningToChannel(channel);
+			LogError("[DISCORD] Stop Listening To Channel");
 		}
 		delete bot;
 		delete channel;

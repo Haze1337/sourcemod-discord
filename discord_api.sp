@@ -105,8 +105,8 @@ stock Handle PrepareRequest(DiscordBot bot, char[] url, EHTTPMethod method=k_EHT
 	
 	//Format url
 	static char turl[128];
-	FormatEx(turl, sizeof(turl), "https://discord.com/api/%s", url);
-	
+	FormatEx(turl, sizeof(turl), "https://discord.com/api/v8/%s", url);
+
 	Handle request = SteamWorks_CreateHTTPRequest(method, turl);
 	if(request == null) {
 		return null;
